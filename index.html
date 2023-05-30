@@ -4,74 +4,87 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <title>Camera excercise</title>
+    <script src="https://cdn.jsdelivr.net/npm/instascan@1.0.0/index.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js" integrity="sha512-r6rDA7W6ZeQhvl8S7yRVQUKVHdexq+GAlNkNNqVC7YyIV+NwqCTJe2hDWCiffTyRNOeGEzRRJ9ifvRm/HCzGYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
+<style>
+
+</style>
 <body>
-    
-    <h2>프로젝트</h2>
-    
-    <h3>회원제 게시판</h3>
-    <div class="container">
-        <div class="row">
-            <div class="col py-5 bg-light">
-                <h1 class="display-4">자바 웹 프로그래머</h1>
-                <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sunt et dicta voluptas at, corporis, facere quos atque molestiae perspiciatis distinctio repudiandae ipsum beatae mollitia incidunt officiis inventore ea accusamus libero?</p>
+    <!-- <video id="videoElement" autoplay></video> -->
+    <div id="placeHolder"></div>
+    <div style="width: 800px; height: 800px;">
+        <div id="reader" width="600px" style="position : absolute;"></div>
+        <button id="stopButton" style="width: 120px; height: 100px;" onclick="execFunc();">QR실행하기</button>        
+        <button id="stopButton" style="width: 120px; height: 100px;" onclick="stopFunc();">중단하기</button>
+    </div>
+    <script type="text/javascript">
+        // navigator.mediaDevices.getUserMedia({ video : true}).then(function(stream){
+        //     var videoElement = document.getElementById("videoElement");
+        //     videoElement.srcObject = stream;
+        //     console.log("check");
+        //     var cameraId = stream.id;
+        //     console.log(cameraId);
+        // }).catch(function(error){
+        //     console.log("카메라 접근에 실패하였습니다.", error);
+        // })
+
+        const html5QrCode = new Html5Qrcode("reader");
+
+        function execFunc(){
+            
+        const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+            /* handle success */
+            // alert(decodeText+ " " + decodedResult);
+            if(confirm("해당 페이지로 이동하시겠습니까?")){
+                window.open(decodedText);
+                console.log(decodedText);
+            }
+            // console.log(decodedResult);
+        };
+        const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+        // If you want to prefer front camera
+        html5QrCode.start({ facingMode: "user" }, config, qrCodeSuccessCallback);
+
+        // // If you want to prefer back camera
+        // html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback);
+
+        // // Select front camera or fail with `OverconstrainedError`.
+        // html5QrCode.start({ facingMode: { exact: "user"} }, config, qrCodeSuccessCallback);
+
+        // // Select back camera or fail with `OverconstrainedError`.
+        // html5QrCode.start({ facingMode: { exact: "environment"} }, config, qrCodeSuccessCallback);
+
+        html5QrCode.stop().then((ignore) =>{
+
+        }).catch((err) =>{
+            console.log(err);
+        })
+
+        // html5QrCode.start({ deviceId: { exact: cameraId} }, config, qrCodeSuccessCallback);
+
+        // function stopFunc(){
+        //     html5QrCode.stop().then((ignore) => {
+        //     // QR Code scanning is stopped.
+        //     }).catch((err) => {
+        //     // Stop failed, handle it.
+        //     });
+        // }
+
+        }
+
+        function stopFunc(){
+            html5QrCode.stop().then((ignore) =>{
                 
-                <a class="btn btn-primary" href="https://www.github.com/kimyoung11" target="_blank">GITHUB</a>
-            </div>
-        </div>
-    </div>
+            })
+        }
 
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="card-group">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">회원제 게시판</h5>
-                            <p class="card-text">
-                                <ul>
-                                    <li>HTML, CSS, JS</li>
-                                    <li>JSP, JSTL</li>
-                                    <li>Spring Web</li>
-                                    <li>Spring Security</li>
-                                    <li>Mariadb</li>
-                                    <li>Mybatis</li>
-                                    <li>AWS EC2, S3</li>
-                                </ul>
-                            </p>
-                        </div>
-                        <div class="card-footer">
-                            <a class="btn btn-primary" href="http://3.35.20.223/prj1">시연하기</a>
-                            <a class="btn btn-outline-primary" href="">코드보기</a>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">2번째 프로젝트</h5>
-                            <p class="card-text">2번째 프로젝트 내용들...</p>
-                        </div>
-                        <div class="card-footer">
-                            <a href="" class="btn btn-primary">시연하기</a>
-                            <a href="" class="btn btn-outline-primary">코드보기</a>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">3번째 프로젝트</h5>
-                            <p class="card-text">3번째 프로젝트 내용들...</p>
-                        </div>
-                        <div class="card-footer">
-                            <a href="" class="btn btn-primary">시연하기</a>
-                            <a href="" class="btn btn-outline-primary">코드보기</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+ 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    </script>
 </body>
 </html>
