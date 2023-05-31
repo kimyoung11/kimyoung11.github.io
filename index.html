@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+    
     <title>Camera excercise</title>
     <script src="https://cdn.jsdelivr.net/npm/instascan@1.0.0/index.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -21,6 +21,7 @@
         <div id="reader" width="600px" style="position : absolute;"></div>
         <button id="stopButton" style="width: 120px; height: 100px;" onclick="execFunc();">QR실행하기</button>        
         <button id="stopButton" style="width: 120px; height: 100px;" onclick="stopFunc();">중단하기</button>
+        <button id="stopButton" style="width: 120px; height: 100px;" onclick="userClick();">TEST</button>
     </div>
     <script type="text/javascript">
         // navigator.mediaDevices.getUserMedia({ video : true}).then(function(stream){
@@ -33,6 +34,17 @@
         //     console.log("카메라 접근에 실패하였습니다.", error);
         // })
 
+
+        function userClick(){
+            var objPopup = window.open('about:blank','');
+            $.ajax({
+                url:"https://f3eb5c51-c4cd-49ce-8839-bda229362676.mock.pstmn.io/test",
+                success:function(response){
+                    if(objPopup) objPopup.location.href = response.url;
+                }
+            });
+        }
+
         const html5QrCode = new Html5Qrcode("reader");
 
         function execFunc(){
@@ -41,7 +53,8 @@
             /* handle success */
             // alert(decodeText+ " " + decodedResult);
             if(confirm("해당 페이지로 이동하시겠습니까?")){
-                window.open(decodedText);
+                // window.open(decodedText);
+                userClick();
                 console.log(decodedText);
                 stopFunc();
             }
