@@ -3,107 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Camera excercise</title>
     <script src="https://cdn.jsdelivr.net/npm/instascan@1.0.0/index.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js" integrity="sha512-r6rDA7W6ZeQhvl8S7yRVQUKVHdexq+GAlNkNNqVC7YyIV+NwqCTJe2hDWCiffTyRNOeGEzRRJ9ifvRm/HCzGYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
-<style>
-
-</style>
 <body>
-    <!-- <video id="videoElement" autoplay></video> -->
-    <div id="placeHolder"></div>
-    <input type="file" accept="image/*;capture=camera">
-    <div style="width: 100%; height: 100%;">
-        <div id="reader" width="600px" style="position : absolute;"></div>
-        <button id="stopButton" style="width: 120px; height: 100px;" onclick="execFunc();">QR실행하기</button>        
-        <button id="stopButton" style="width: 120px; height: 100px;" onclick="stopFunc();">중단하기</button>
-        <button id="stopButton" style="width: 120px; height: 100px;" onclick="userClick();">TEST</button>
-    </div>
-    <script type="text/javascript">
-        // navigator.mediaDevices.getUserMedia({ video : true}).then(function(stream){
-        //     var videoElement = document.getElementById("videoElement");
-        //     videoElement.srcObject = stream;
-        //     console.log("check");
-        //     var cameraId = stream.id;
-        //     console.log(cameraId);
-        // }).catch(function(error){
-        //     console.log("카메라 접근에 실패하였습니다.", error);
-        // })
+    <img src="C:/Users/user/Desktop/workspace/nuri/nurizip/target/attachfile/menu/SITE_000000000000001/MENU_202306260942039910.png">
 
+    <div style="width: 500px" id="reader"></div>
+    <button id="stopButton" style="width: 120px; height: 100px;" onclick="execFunc();">QR실행하기</button>        
+    <button id="stopButton" style="width: 120px; height: 100px;" onclick="stopFunc();">중단하기</button>
 
-         function userClick(){
-            var objPopup = window.open('about:blank','');
-            $.ajax({
-                url:"https://f3eb5c51-c4cd-49ce-8839-bda229362676.mock.pstmn.io/test",
-                success:function(response){
-                    // if(objPopup) objPopup.location.href = response.url;
-                    objPopup.location = response.url;
-                    objPopup.focus();
-                }
-            }).catch(err => {
-                objPopup.close();
-            });
-        }
+    <script>
 
-        const html5QrCode = new Html5Qrcode("reader");
+    function execFunc(){
+        var readerElement = document.getElementById("reader");
+    readerElement.style.display = "block";
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: 250 });
+    html5QrcodeScanner.render(onScanSuccess);
+    }
 
-        function execFunc(){
-            
-        const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-            /* handle success */
-            // alert(decodeText+ " " + decodedResult);
-            if(confirm("해당 페이지로 이동하시겠습니까?")){
-                // window.open(decodedText);
-                userClick();
-                console.log(decodedText);
-                stopFunc();
-            }
-            // console.log(decodedResult);
-        };
-        const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+    function stopFunc(){
+        var readerElement = document.getElementById("reader");
+    readerElement.style.display = "none";
+    }
 
-        // If you want to prefer front camera
-        html5QrCode.start({ facingMode: { exact: "environment"} }, config, qrCodeSuccessCallback);
+    function onScanSuccess(decodedText, decodedResult) {
+        // Handle on success condition with the decoded text or result.
+        console.log(`Scan result: ${decodedText}`, decodedResult);
 
-        // // If you want to prefer back camera
-        // html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback);
+        $.ajax({
+      type : "get"
+      , dataType : "json"
+      , url : "http://192.168.10.168/qrc/qrcodeFileReader.do"
+      , data : {decodedText : decodedText}
+      , success : function(result) {
+        alert(result);
+      }, error:function(data) {
+        console.log(data);
+      }
+    });
+    }
 
-        // // Select front camera or fail with `OverconstrainedError`.
-        // html5QrCode.start({ facingMode: { exact: "user"} }, config, qrCodeSuccessCallback);
-
-        // // Select back camera or fail with `OverconstrainedError`.
-        // html5QrCode.start({ facingMode: { exact: "environment"} }, config, qrCodeSuccessCallback);
-
-        html5QrCode.stop().then((ignore) =>{
-
-        }).catch((err) =>{
-            console.log(err);
-        })
-
-        // html5QrCode.start({ deviceId: { exact: cameraId} }, config, qrCodeSuccessCallback);
-
-        // function stopFunc(){
-        //     html5QrCode.stop().then((ignore) => {
-        //     // QR Code scanning is stopped.
-        //     }).catch((err) => {
-        //     // Stop failed, handle it.
-        //     });
-        // }
-
-        }
-
-        function stopFunc(){
-            html5QrCode.stop().then((ignore) =>{
-                
-            })
-        }
-
- 
-
+    function onScanError(err){
+        console.log(err);
+    }
 
     </script>
 </body>
