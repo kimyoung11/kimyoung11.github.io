@@ -22,7 +22,7 @@
         var readerElement = document.getElementById("reader");
     readerElement.style.display = "block";
     var html5QrcodeScanner = new Html5QrcodeScanner(
-            "reader", { fps: 10, qrbox: 250 });
+            "reader", { fps: 10, qrbox: 250, disableFlip: Boolean});
     html5QrcodeScanner.render(onScanSuccess);
     }
 
