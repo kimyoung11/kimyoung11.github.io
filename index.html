@@ -38,7 +38,7 @@
         $.ajax({
       type : "get"
       , dataType : "json"
-      , url : "http://192.168.10.168/qrc/qrcodeFileReader.do"
+      , url : "/qrc/qrcodeFileReader.do"
       , data : {decodedText : decodedText}
       , success : function(result) {
         alert(result);
